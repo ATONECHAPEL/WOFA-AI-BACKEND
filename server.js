@@ -19,8 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/progress", require("./routes/progress"));
 app.use("/api/quizzes", require("./routes/quizzes"));
 app.use("/api/progress", require("./routes/progress"));
-
-
+app.use("/api/debug", require("./routes/debug"));
 
 // Simple request logger (helps debugging)
 app.use((req, res, next) => {

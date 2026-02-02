@@ -2,34 +2,16 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    if (!process.env.MONGO_URI) {
-      throw new Error("MONGO_URI is not defined in environment variables");
-    }
-
-    await mongoose.connect(process.env.MONGO_URI, {
-      autoIndex: true
-    });
+    await mongoose.connect(process.env.MONGO_URI);
 
     console.log("✅ MongoDB connected");
-
-    // Connection event listeners (important for production)
-    mongoose.connection.on("error", err => {
-      console.error("❌ MongoDB runtime error:", err);
-    });
-
-    mongoose.connection.on("disconnected", () => {
-      console.warn("⚠️ MongoDB disconnected");
-    });
-
-    mongoose.connection.on("reconnected", () => {
-      console.log("🔄 MongoDB reconnected");
-    });
-
-    return mongoose.connection;
+    console.log("📦 Database:", mongoose.connection.name);
+    console.log("🌍 Host:", mongoose.connection.host);
+    console.log("🧠 Port:", mongoose.connection.port);
 
   } catch (error) {
-    console.error("❌ MongoDB connection failed:", error.message);
-    throw error; // Let server.js decide what to do
+    console.error("❌ MongoDB error:", error.message);
+    process.exit(1);
   }
 };
 

@@ -1,7 +1,24 @@
-const express = require("express");
-const router = express.Router();
-const { markComplete } = require("../controllers/progressController");
+const mongoose = require("mongoose");
 
-router.post("/complete", markComplete);
+const ProgressSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
+  lesson: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Lesson",
+    required: true
+  },
+  completed: {
+    type: Boolean,
+    default: false
+  },
+  completedAt: {
+    type: Date,
+    default: Date.now
+  }
+});
 
-module.exports = router;
+module.exports = mongoose.model("Progress", ProgressSchema);

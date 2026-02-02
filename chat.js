@@ -1,16 +1,50 @@
-const express = require("express");
-const router = express.Router();
+const mongoose = require("mongoose");
 
-const { chatAI } = require("../controllers/chatController");
+const ChatSchema = new mongoose.Schema(
+  {
+    question: {
+      type: String,
+      required: true,
+      trim: true
+    },
 
-/* =========================
-   AI CHAT ENDPOINT
-   =========================
-   Handles:
-   - text questions
-   - image explanations (Vision AI)
-   - lesson-related queries
-*/
-router.post("/", chatAI);
+    answer: {
+      type: String,
+      required: true
+    },
 
-module.exports = router;
+    subject: {
+      type: String,
+      index: true
+    },
+
+    // Optional image used in the chat (Vision AI)
+    image: {
+      type: String // base64 or URL
+    },
+
+    // Type of interaction
+    type: {
+      type: String,
+      enum: ["chat", "image", "lesson"],
+      default: "chat"
+    },
+
+    // Optional reference to a lesson (for AI teaching)
+    lesson: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Lesson"
+    },
+
+    // Optional future user reference
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
+  },
+  {
+    timestamps: true // replaces createdAt manually
+  }
+);
+
+module.exports = mongoose.model("Chat", ChatSchema);
